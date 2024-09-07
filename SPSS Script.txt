@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Define paths
+app_path="/Applications/IBM SPSS Statistics/SPSS Statistics.app/Contents/lib/"
+usb_path="/Volumes/USB DRIVE/29.0.1.0-IM-S29STATC-MAC-IF001/libplatdep.dylib"
+
+# Check if the application path exists
+if [ ! -d "$app_path" ]; then
+    echo "Application path does not exist: $app_path"
+    exit 1
+fi
+
+# Check if the USB path exists
+if [ ! -f "$usb_path" ]; then
+    echo "File not found on USB: $usb_path"
+    exit 1
+fi
+
+# Delete the existing libplatdep.dylib file
+lib_to_delete="$app_path/libplatdep.dylib"
+if [ -f "$lib_to_delete" ]; then
+    echo "Deleting $lib_to_delete..."
+    sudo rm "$lib_to_delete"
+else
+    echo "$lib_to_delete does not exist."
+fi
+
+# Copy the new file from USB to the application path
+echo "Copying $usb_path to $app_path..."
+sudo cp "$usb_path" "$app_path"
+
+echo "Operation completed successfully."
